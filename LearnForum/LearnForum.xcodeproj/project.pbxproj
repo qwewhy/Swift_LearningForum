@@ -29,9 +29,22 @@
 		116ED0BC2DC0A0880070FAE9 /* LearnForumUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearnForumUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1115A7EA2DC0A5710012EE53 /* Exceptions for "LearnForum" folder in "LearnForum" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				GeneratedAPI,
+			);
+			target = 116ED0A12DC0A0870070FAE9 /* LearnForum */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		116ED0A42DC0A0870070FAE9 /* LearnForum */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1115A7EA2DC0A5710012EE53 /* Exceptions for "LearnForum" folder in "LearnForum" target */,
+			);
 			path = LearnForum;
 			sourceTree = "<group>";
 		};
