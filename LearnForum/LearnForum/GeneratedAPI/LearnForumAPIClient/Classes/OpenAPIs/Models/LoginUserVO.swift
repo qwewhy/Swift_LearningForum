@@ -13,14 +13,14 @@ import AnyCodable
 public struct LoginUserVO: Codable, JSONEncodable, Hashable {
 
     public var createTime: Date?
-    public var id: Int64?
+    public var id: String?
     public var updateTime: Date?
     public var userAvatar: String?
     public var userName: String?
     public var userProfile: String?
     public var userRole: String?
 
-    public init(createTime: Date? = nil, id: Int64? = nil, updateTime: Date? = nil, userAvatar: String? = nil, userName: String? = nil, userProfile: String? = nil, userRole: String? = nil) {
+    public init(createTime: Date? = nil, id: String? = nil, updateTime: Date? = nil, userAvatar: String? = nil, userName: String? = nil, userProfile: String? = nil, userRole: String? = nil) {
         self.createTime = createTime
         self.id = id
         self.updateTime = updateTime

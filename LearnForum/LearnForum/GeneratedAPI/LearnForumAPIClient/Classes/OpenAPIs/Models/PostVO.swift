@@ -17,15 +17,15 @@ public struct PostVO: Codable, JSONEncodable, Hashable {
     public var favourNum: Int?
     public var hasFavour: Bool?
     public var hasThumb: Bool?
-    public var id: Int64?
+    public var id: String?
     public var tagList: [String]?
     public var thumbNum: Int?
     public var title: String?
     public var updateTime: Date?
     public var user: UserVO?
-    public var userId: Int64?
+    public var userId: String?
 
-    public init(content: String? = nil, createTime: Date? = nil, favourNum: Int? = nil, hasFavour: Bool? = nil, hasThumb: Bool? = nil, id: Int64? = nil, tagList: [String]? = nil, thumbNum: Int? = nil, title: String? = nil, updateTime: Date? = nil, user: UserVO? = nil, userId: Int64? = nil) {
+    public init(content: String? = nil, createTime: Date? = nil, favourNum: Int? = nil, hasFavour: Bool? = nil, hasThumb: Bool? = nil, id: String? = nil, tagList: [String]? = nil, thumbNum: Int? = nil, title: String? = nil, updateTime: Date? = nil, user: UserVO? = nil, userId: String? = nil) {
         self.content = content
         self.createTime = createTime
         self.favourNum = favourNum

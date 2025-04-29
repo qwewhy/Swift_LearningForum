@@ -13,10 +13,10 @@ import AnyCodable
 public struct BaseResponselong: Codable, JSONEncodable, Hashable {
 
     public var code: Int?
-    public var data: Int64?
+    public var data: String?
     public var message: String?
 
-    public init(code: Int? = nil, data: Int64? = nil, message: String? = nil) {
+    public init(code: Int? = nil, data: String? = nil, message: String? = nil) {
         self.code = code
         self.data = data
         self.message = message

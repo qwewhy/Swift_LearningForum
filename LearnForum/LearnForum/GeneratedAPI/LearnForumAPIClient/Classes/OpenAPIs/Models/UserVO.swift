@@ -12,41 +12,61 @@ import AnyCodable
 
 public struct UserVO: Codable, JSONEncodable, Hashable {
 
+    public var accessKey: String?
     public var createTime: Date?
-    public var id: Int64?
+    public var email: String?
+    public var gender: String?
+    public var id: String?
+    public var updateTime: Date?
     public var userAvatar: String?
     public var userName: String?
     public var userProfile: String?
     public var userRole: String?
+    public var userState: String?
 
-    public init(createTime: Date? = nil, id: Int64? = nil, userAvatar: String? = nil, userName: String? = nil, userProfile: String? = nil, userRole: String? = nil) {
+    public init(accessKey: String? = nil, createTime: Date? = nil, email: String? = nil, gender: String? = nil, id: String? = nil, updateTime: Date? = nil, userAvatar: String? = nil, userName: String? = nil, userProfile: String? = nil, userRole: String? = nil, userState: String? = nil) {
+        self.accessKey = accessKey
         self.createTime = createTime
+        self.email = email
+        self.gender = gender
         self.id = id
+        self.updateTime = updateTime
         self.userAvatar = userAvatar
         self.userName = userName
         self.userProfile = userProfile
         self.userRole = userRole
+        self.userState = userState
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case accessKey
         case createTime
+        case email
+        case gender
         case id
+        case updateTime
         case userAvatar
         case userName
         case userProfile
         case userRole
+        case userState
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(accessKey, forKey: .accessKey)
         try container.encodeIfPresent(createTime, forKey: .createTime)
+        try container.encodeIfPresent(email, forKey: .email)
+        try container.encodeIfPresent(gender, forKey: .gender)
         try container.encodeIfPresent(id, forKey: .id)
+        try container.encodeIfPresent(updateTime, forKey: .updateTime)
         try container.encodeIfPresent(userAvatar, forKey: .userAvatar)
         try container.encodeIfPresent(userName, forKey: .userName)
         try container.encodeIfPresent(userProfile, forKey: .userProfile)
         try container.encodeIfPresent(userRole, forKey: .userRole)
+        try container.encodeIfPresent(userState, forKey: .userState)
     }
 }
 
