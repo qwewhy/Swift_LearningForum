@@ -4,22 +4,16 @@
 //
 //  Created by Hongyuan Wang on 29/4/2025.
 //
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello")
-            Text("Git")
-        }
-        .padding()
+        BrowseQuestionsView()
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
