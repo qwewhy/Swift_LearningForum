@@ -12,12 +12,12 @@ import AnyCodable
 
 public struct QuestionBankQueryRequest: Codable, JSONEncodable, Hashable {
 
-    public var current: Int?
+    public var current: String?
     public var description: String?
     public var id: Int64?
     public var needQueryQuestionList: Bool?
     public var notId: Int64?
-    public var pageSize: Int?
+    public var pageSize: String?
     public var picture: String?
     public var searchText: String?
     public var sortField: String?
@@ -25,7 +25,7 @@ public struct QuestionBankQueryRequest: Codable, JSONEncodable, Hashable {
     public var title: String?
     public var userId: Int64?
 
-    public init(current: Int? = nil, description: String? = nil, id: Int64? = nil, needQueryQuestionList: Bool? = nil, notId: Int64? = nil, pageSize: Int? = nil, picture: String? = nil, searchText: String? = nil, sortField: String? = nil, sortOrder: String? = nil, title: String? = nil, userId: Int64? = nil) {
+    public init(current: String? = nil, description: String? = nil, id: Int64? = nil, needQueryQuestionList: Bool? = nil, notId: Int64? = nil, pageSize: String? = nil, picture: String? = nil, searchText: String? = nil, sortField: String? = nil, sortOrder: String? = nil, title: String? = nil, userId: Int64? = nil) {
         self.current = current
         self.description = description
         self.id = id

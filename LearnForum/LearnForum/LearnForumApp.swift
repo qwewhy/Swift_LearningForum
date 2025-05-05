@@ -35,7 +35,18 @@ struct LearnForumApp: App {
             "Content-Type": "application/json"
         ]
         
+        // 配置会话以允许cookie存储和发送
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.httpShouldSetCookies = true
+        sessionConfig.httpCookieAcceptPolicy = .always
+        sessionConfig.httpCookieStorage = HTTPCookieStorage.shared
+        
+        // 全局配置URLSession
+        URLSession.shared.configuration.httpCookieStorage = HTTPCookieStorage.shared
+        URLSession.shared.configuration.httpShouldSetCookies = true
+        
         // 输出配置完成信息
         print("API 客户端配置完成")
+        print("Cookie存储已启用")
     }
 }

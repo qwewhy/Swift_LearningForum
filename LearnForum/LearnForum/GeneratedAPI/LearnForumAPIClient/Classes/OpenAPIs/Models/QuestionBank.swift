@@ -15,15 +15,15 @@ public struct QuestionBank: Codable, JSONEncodable, Hashable {
     public var createTime: Date?
     public var description: String?
     public var editTime: Date?
-    public var id: Int64?
+    public var id: String?
     public var isDelete: Int?
     public var picture: String?
     public var priority: Int?
     public var title: String?
     public var updateTime: Date?
-    public var userId: Int64?
+    public var userId: String?
 
-    public init(createTime: Date? = nil, description: String? = nil, editTime: Date? = nil, id: Int64? = nil, isDelete: Int? = nil, picture: String? = nil, priority: Int? = nil, title: String? = nil, updateTime: Date? = nil, userId: Int64? = nil) {
+    public init(createTime: Date? = nil, description: String? = nil, editTime: Date? = nil, id: String? = nil, isDelete: Int? = nil, picture: String? = nil, priority: Int? = nil, title: String? = nil, updateTime: Date? = nil, userId: String? = nil) {
         self.createTime = createTime
         self.description = description
         self.editTime = editTime

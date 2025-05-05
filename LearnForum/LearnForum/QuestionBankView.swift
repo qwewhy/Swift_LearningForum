@@ -8,6 +8,7 @@ struct QuestionBankView: View {
     @State private var currentPage = 1
     @State private var pageSize = 10
     @State private var responseDebugInfo: String = ""
+    @State private var needLogin = false
     
     var body: some View {
         NavigationView {
@@ -16,9 +17,28 @@ struct QuestionBankView: View {
                     ProgressView()
                         .scaleEffect(1.5)
                         .padding()
+                } else if needLogin {
+                    VStack {
+                        Text("请先登录")
+                            .font(.title)
+                            .padding()
+                        
+                        Text("您需要登录后才能查看题库")
+                            .foregroundColor(.gray)
+                            .padding()
+                        
+                        Button("返回登录") {
+                            // 发送退出登录通知，回到登录界面
+                            NotificationCenter.default.post(name: .userLoggedOut, object: nil)
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
                 } else if let error = errorMessage {
                     VStack {
-                        Text("Error occurred")
+                        Text("发生错误")
                             .font(.title)
                             .foregroundColor(.red)
                             .padding()
@@ -28,7 +48,7 @@ struct QuestionBankView: View {
                             .padding()
                         
                         if !responseDebugInfo.isEmpty {
-                            Text("Debug Info:")
+                            Text("调试信息:")
                                 .font(.headline)
                                 .padding(.top)
                             
@@ -44,7 +64,7 @@ struct QuestionBankView: View {
                             .padding()
                         }
                         
-                        Button("Retry") {
+                        Button("重试") {
                             loadQuestionBanks()
                         }
                         .padding()
@@ -54,13 +74,13 @@ struct QuestionBankView: View {
                     }
                 } else if questionBanks.isEmpty {
                     VStack {
-                        Text("No question banks found")
+                        Text("未找到题库")
                             .font(.title2)
                             .foregroundColor(.gray)
                             .padding()
                         
                         if !responseDebugInfo.isEmpty {
-                            Text("Debug Info:")
+                            Text("调试信息:")
                                 .font(.headline)
                                 .padding(.top)
                             
@@ -76,7 +96,7 @@ struct QuestionBankView: View {
                             .padding()
                         }
                         
-                        Button("Refresh") {
+                        Button("刷新") {
                             loadQuestionBanks()
                         }
                         .padding()
@@ -95,7 +115,7 @@ struct QuestionBankView: View {
                     }
                 }
             }
-            .navigationTitle("Question Banks")
+            .navigationTitle("题库")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -115,13 +135,14 @@ struct QuestionBankView: View {
         isLoading = true
         errorMessage = nil
         responseDebugInfo = ""
+        needLogin = false
         
         print("开始请求API: \(LearnForumAPIClientAPI.basePath)/api/questionBank/list/page")
         
         // Create a request
         let queryRequest = QuestionBankQueryRequest(
-            current: currentPage,
-            pageSize: pageSize,
+            current: String(currentPage),
+            pageSize: String(pageSize),
             sortField: "createTime",
             sortOrder: "descend"
         )
@@ -133,8 +154,8 @@ struct QuestionBankView: View {
             isLoading = false
             
             if let error = error {
-                errorMessage = "API Error: \(error.localizedDescription)"
-                print("Error: \(error)")
+                errorMessage = "API错误: \(error.localizedDescription)"
+                print("错误: \(error)")
                 responseDebugInfo = "错误详情: \(error)"
                 return
             }
@@ -143,12 +164,19 @@ struct QuestionBankView: View {
             responseDebugInfo += "状态码: \(response?.code ?? -1)\n"
             responseDebugInfo += "消息: \(response?.message ?? "无消息")\n"
             
+            // 检查是否是未登录错误
+            if let code = response?.code, code == 40100 {
+                needLogin = true
+                errorMessage = "请先登录"
+                return
+            }
+            
             if let responseData = response?.data {
                 responseDebugInfo += "返回数据: 存在\n"
                 
                 if let records = responseData.records {
                     self.questionBanks = records
-                    print("Loaded \(records.count) question banks")
+                    print("加载了 \(records.count) 个题库")
                     responseDebugInfo += "记录数: \(records.count)\n"
                     
                     if records.isEmpty {
@@ -157,26 +185,26 @@ struct QuestionBankView: View {
                         // 打印第一条记录的内容
                         if let firstRecord = records.first {
                             responseDebugInfo += "第一条记录:\n"
-                            responseDebugInfo += "- ID: \(firstRecord.id ?? 0)\n"
+                            responseDebugInfo += "- ID: \(firstRecord.id ?? "无")\n"
                             responseDebugInfo += "- 标题: \(firstRecord.title ?? "无标题")\n"
                             responseDebugInfo += "- 描述: \(firstRecord.description ?? "无描述")\n"
                         }
                     }
                 } else {
                     self.questionBanks = []
-                    print("No records in response data")
+                    print("响应数据中没有记录")
                     responseDebugInfo += "records 字段为空\n"
                     
                     // 输出完整的响应数据结构
                     responseDebugInfo += "分页信息:\n"
-                    responseDebugInfo += "- total: \(responseData.total ?? 0)\n"
-                    responseDebugInfo += "- pages: \(responseData.pages ?? 0)\n"
-                    responseDebugInfo += "- current: \(responseData.current ?? 0)\n"
-                    responseDebugInfo += "- size: \(responseData.size ?? 0)\n"
+                    responseDebugInfo += "- total: \(responseData.total ?? "")\n"
+                    responseDebugInfo += "- pages: \(responseData.pages ?? "")\n"
+                    responseDebugInfo += "- current: \(responseData.current ?? "")\n"
+                    responseDebugInfo += "- size: \(responseData.size ?? "")\n"
                 }
             } else {
-                errorMessage = "No data in response"
-                print("No data in response")
+                errorMessage = "响应中无数据"
+                print("响应中无数据")
                 responseDebugInfo += "response.data 为 nil\n"
                 
                 // 输出完整的响应对象内容
@@ -202,7 +230,7 @@ struct QuestionBankRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(bank.title ?? "Untitled")
+            Text(bank.title ?? "未命名")
                 .font(.headline)
             
             if let description = bank.description, !description.isEmpty {
@@ -214,14 +242,14 @@ struct QuestionBankRow: View {
             
             HStack {
                 if let createdTime = bank.createTime {
-                    Text("Created: \(formattedDate(createdTime))")
+                    Text("创建时间: \(formattedDate(createdTime))")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Text("ID: \(bank.id ?? 0)")
+                Text("ID: \(bank.id ?? "")")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

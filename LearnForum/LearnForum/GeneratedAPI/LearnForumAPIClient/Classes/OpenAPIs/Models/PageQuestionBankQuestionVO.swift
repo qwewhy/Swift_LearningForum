@@ -13,17 +13,17 @@ import AnyCodable
 public struct PageQuestionBankQuestionVO: Codable, JSONEncodable, Hashable {
 
     public var countId: String?
-    public var current: Int64?
+    public var current: String?
     public var maxLimit: Int64?
     public var optimizeCountSql: Bool?
     public var orders: [OrderItem]?
-    public var pages: Int64?
+    public var pages: String?
     public var records: [QuestionBankQuestionVO]?
     public var searchCount: Bool?
-    public var size: Int64?
+    public var size: String?
     public var total: Int64?
 
-    public init(countId: String? = nil, current: Int64? = nil, maxLimit: Int64? = nil, optimizeCountSql: Bool? = nil, orders: [OrderItem]? = nil, pages: Int64? = nil, records: [QuestionBankQuestionVO]? = nil, searchCount: Bool? = nil, size: Int64? = nil, total: Int64? = nil) {
+    public init(countId: String? = nil, current: String? = nil, maxLimit: Int64? = nil, optimizeCountSql: Bool? = nil, orders: [OrderItem]? = nil, pages: String? = nil, records: [QuestionBankQuestionVO]? = nil, searchCount: Bool? = nil, size: String? = nil, total: Int64? = nil) {
         self.countId = countId
         self.current = current
         self.maxLimit = maxLimit
