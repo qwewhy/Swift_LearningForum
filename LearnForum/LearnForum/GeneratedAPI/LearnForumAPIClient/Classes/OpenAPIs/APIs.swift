@@ -9,7 +9,7 @@ import Foundation
 import FoundationNetworking
 #endif
 open class LearnForumAPIClientAPI {
-    public static var basePath = "http://localhost:8101/api"
+    public static var basePath = "http://43.165.196.25:8101/api"
     public static var customHeaders: [String: String] = [:]
     public static var credential: URLCredential?
     public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory()
