@@ -1,13 +1,13 @@
 import SwiftUI
 import LearnForumAPIClient
 
+
 struct QuestionBankView: View {
     @State private var questionBanks: [QuestionBank] = []
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
     @State private var currentPage = 1
     @State private var pageSize = 10
-    @State private var responseDebugInfo: String = ""
     @State private var needLogin = false
     
     var body: some View {
@@ -19,15 +19,15 @@ struct QuestionBankView: View {
                         .padding()
                 } else if needLogin {
                     VStack {
-                        Text("请先登录")
+                        Text("Please Login First")
                             .font(.title)
                             .padding()
                         
-                        Text("您需要登录后才能查看题库")
+                        Text("You need to login to view question banks")
                             .foregroundColor(.gray)
                             .padding()
                         
-                        Button("返回登录") {
+                        Button("Back to Login") {
                             // 发送退出登录通知，回到登录界面
                             NotificationCenter.default.post(name: .userLoggedOut, object: nil)
                         }
@@ -38,7 +38,7 @@ struct QuestionBankView: View {
                     }
                 } else if let error = errorMessage {
                     VStack {
-                        Text("发生错误")
+                        Text("Error Occurred")
                             .font(.title)
                             .foregroundColor(.red)
                             .padding()
@@ -47,24 +47,7 @@ struct QuestionBankView: View {
                             .foregroundColor(.gray)
                             .padding()
                         
-                        if !responseDebugInfo.isEmpty {
-                            Text("调试信息:")
-                                .font(.headline)
-                                .padding(.top)
-                            
-                            ScrollView {
-                                Text(responseDebugInfo)
-                                    .font(.system(.caption, design: .monospaced))
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .frame(height: 150)
-                            .background(Color.black.opacity(0.05))
-                            .cornerRadius(8)
-                            .padding()
-                        }
-                        
-                        Button("重试") {
+                        Button("Retry") {
                             loadQuestionBanks()
                         }
                         .padding()
@@ -74,29 +57,12 @@ struct QuestionBankView: View {
                     }
                 } else if questionBanks.isEmpty {
                     VStack {
-                        Text("未找到题库")
+                        Text("No Question Banks Found")
                             .font(.title2)
                             .foregroundColor(.gray)
                             .padding()
                         
-                        if !responseDebugInfo.isEmpty {
-                            Text("调试信息:")
-                                .font(.headline)
-                                .padding(.top)
-                            
-                            ScrollView {
-                                Text(responseDebugInfo)
-                                    .font(.system(.caption, design: .monospaced))
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .frame(height: 150)
-                            .background(Color.black.opacity(0.05))
-                            .cornerRadius(8)
-                            .padding()
-                        }
-                        
-                        Button("刷新") {
+                        Button("Refresh") {
                             loadQuestionBanks()
                         }
                         .padding()
@@ -107,7 +73,9 @@ struct QuestionBankView: View {
                 } else {
                     List {
                         ForEach(questionBanks, id: \.id) { bank in
-                            QuestionBankRow(bank: bank)
+                            NavigationLink(destination: QuestionBankDetailView(bank: bank)) {
+                                QuestionBankRow(bank: bank)
+                            }
                         }
                     }
                     .refreshable {
@@ -115,7 +83,7 @@ struct QuestionBankView: View {
                     }
                 }
             }
-            .navigationTitle("题库")
+            .navigationTitle("Question Banks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -134,10 +102,7 @@ struct QuestionBankView: View {
     private func loadQuestionBanks() {
         isLoading = true
         errorMessage = nil
-        responseDebugInfo = ""
         needLogin = false
-        
-        print("开始请求API: \(LearnForumAPIClientAPI.basePath)/api/questionBank/list/page")
         
         // Create a request
         let queryRequest = QuestionBankQueryRequest(
@@ -154,72 +119,25 @@ struct QuestionBankView: View {
             isLoading = false
             
             if let error = error {
-                errorMessage = "API错误: \(error.localizedDescription)"
-                print("错误: \(error)")
-                responseDebugInfo = "错误详情: \(error)"
+                errorMessage = "API Error: \(error.localizedDescription)"
                 return
             }
-            
-            print("API返回状态: \(response?.code ?? -1), 消息: \(response?.message ?? "无消息")")
-            responseDebugInfo += "状态码: \(response?.code ?? -1)\n"
-            responseDebugInfo += "消息: \(response?.message ?? "无消息")\n"
             
             // 检查是否是未登录错误
             if let code = response?.code, code == 40100 {
                 needLogin = true
-                errorMessage = "请先登录"
+                errorMessage = "Please login first"
                 return
             }
             
             if let responseData = response?.data {
-                responseDebugInfo += "返回数据: 存在\n"
-                
                 if let records = responseData.records {
                     self.questionBanks = records
-                    print("加载了 \(records.count) 个题库")
-                    responseDebugInfo += "记录数: \(records.count)\n"
-                    
-                    if records.isEmpty {
-                        responseDebugInfo += "记录为空\n"
-                    } else {
-                        // 打印第一条记录的内容
-                        if let firstRecord = records.first {
-                            responseDebugInfo += "第一条记录:\n"
-                            responseDebugInfo += "- ID: \(firstRecord.id ?? "无")\n"
-                            responseDebugInfo += "- 标题: \(firstRecord.title ?? "无标题")\n"
-                            responseDebugInfo += "- 描述: \(firstRecord.description ?? "无描述")\n"
-                        }
-                    }
                 } else {
                     self.questionBanks = []
-                    print("响应数据中没有记录")
-                    responseDebugInfo += "records 字段为空\n"
-                    
-                    // 输出完整的响应数据结构
-                    responseDebugInfo += "分页信息:\n"
-                    responseDebugInfo += "- total: \(responseData.total ?? "")\n"
-                    responseDebugInfo += "- pages: \(responseData.pages ?? "")\n"
-                    responseDebugInfo += "- current: \(responseData.current ?? "")\n"
-                    responseDebugInfo += "- size: \(responseData.size ?? "")\n"
                 }
             } else {
-                errorMessage = "响应中无数据"
-                print("响应中无数据")
-                responseDebugInfo += "response.data 为 nil\n"
-                
-                // 输出完整的响应对象内容
-                var fullResponseInfo = "完整响应信息:\n"
-                if let response = response {
-                    fullResponseInfo += "Response 对象存在\n"
-                    fullResponseInfo += "- code: \(response.code ?? -1)\n"
-                    fullResponseInfo += "- message: \(response.message ?? "无")\n"
-                    fullResponseInfo += "- data: nil\n"
-                } else {
-                    fullResponseInfo += "Response 对象为 nil\n"
-                }
-                responseDebugInfo += fullResponseInfo
-                
-                print(fullResponseInfo)
+                errorMessage = "No data in response"
             }
         }
     }
@@ -227,34 +145,82 @@ struct QuestionBankView: View {
 
 struct QuestionBankRow: View {
     let bank: QuestionBank
+    @State private var imageURL: URL?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(bank.title ?? "未命名")
-                .font(.headline)
-            
-            if let description = bank.description, !description.isEmpty {
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
+        HStack(spacing: 12) {
+            // 题库图片，使用缓存
+            CachedAsyncImage(url: getImageURL()) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .frame(width: 80, height: 80)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 80, height: 80)
+                        .cornerRadius(8)
+                        .clipped()
+                case .failure:
+                    Image(systemName: "photo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(20)
+                        .frame(width: 80, height: 80)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                @unknown default:
+                    EmptyView()
+                }
             }
+            .frame(width: 80, height: 80)
             
-            HStack {
-                if let createdTime = bank.createTime {
-                    Text("创建时间: \(formattedDate(createdTime))")
+            // 题库信息
+            VStack(alignment: .leading, spacing: 8) {
+                Text(bank.title ?? "Untitled")
+                    .font(.headline)
+                    .lineLimit(1)
+                
+                if let description = bank.description, !description.isEmpty {
+                    Text(description)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
+                }
+                
+                HStack {
+                    if let createdTime = bank.createTime {
+                        Text("Created: \(formattedDate(createdTime))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    Text("ID: \(bank.id ?? "")")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
-                Spacer()
-                
-                Text("ID: \(bank.id ?? "")")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
         }
         .padding(.vertical, 8)
+    }
+    
+    private func getImageURL() -> URL? {
+        guard let pictureString = bank.picture, !pictureString.isEmpty else {
+            return nil
+        }
+        
+        // 检查 picture 是否已经是完整的 URL
+        if pictureString.lowercased().hasPrefix("http://") || pictureString.lowercased().hasPrefix("https://") {
+            return URL(string: pictureString)
+        }
+        
+        // 否则，拼接 API 基础 URL
+        return URL(string: "\(LearnForumAPIClientAPI.basePath)/\(pictureString)")
     }
     
     private func formattedDate(_ date: Date) -> String {
@@ -264,6 +230,190 @@ struct QuestionBankRow: View {
     }
 }
 
+// 题库详情视图
+struct QuestionBankDetailView: View {
+    let bank: QuestionBank
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                CachedAsyncImage(url: getImageURL()) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .frame(height: 200)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(12)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 200)
+                            .frame(maxWidth: .infinity)
+                            .cornerRadius(12)
+                            .clipped()
+                    case .failure:
+                        VStack {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60, height: 60)
+                            
+                            Text("Image Loading Failed")
+                                .foregroundColor(.gray)
+                        }
+                        .frame(height: 200)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+                .padding(.horizontal)
+                
+                // 题库详细信息
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(bank.title ?? "Untitled")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    if let description = bank.description, !description.isEmpty {
+                        Text(description)
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    // 查看题库问题按钮
+                    NavigationLink(destination: QuestionListView(questionBank: bank)) {
+                        HStack {
+                            Image(systemName: "list.bullet")
+                            Text("View All Questions")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.vertical, 8)
+                    
+                    Divider()
+                    
+                    // 题库元数据
+                    Group {
+                        HStack {
+                            Text("ID:")
+                                .fontWeight(.semibold)
+                            Text(bank.id ?? "Unknown")
+                            Spacer()
+                        }
+                        
+                        if let createdTime = bank.createTime {
+                            HStack {
+                                Text("Created:")
+                                    .fontWeight(.semibold)
+                                Text(formattedDate(createdTime, withTime: true))
+                                Spacer()
+                            }
+                        }
+                        
+                        if let updateTime = bank.updateTime {
+                            HStack {
+                                Text("Updated:")
+                                    .fontWeight(.semibold)
+                                Text(formattedDate(updateTime, withTime: true))
+                                Spacer()
+                            }
+                        }
+                        
+                        if let priority = bank.priority {
+                            HStack {
+                                Text("Priority:")
+                                    .fontWeight(.semibold)
+                                Text("\(priority)")
+                                Spacer()
+                            }
+                        }
+                    }
+                    .font(.subheadline)
+                    
+                    Divider()
+                    
+                    // 图片路径信息
+                    if let pictureString = bank.picture, !pictureString.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Image Path Information")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                            
+                            Text("Original Path: \(pictureString)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            if let fullURL = getImageURL() {
+                                Text("Full URL: \(fullURL.absoluteString)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.05))
+                        .cornerRadius(8)
+                    }
+                }
+                .padding()
+            }
+        }
+        .navigationTitle("Question Bank Details")
+    }
+    
+    private func getImageURL() -> URL? {
+        guard let pictureString = bank.picture, !pictureString.isEmpty else {
+            return nil
+        }
+        
+        // 检查 picture 是否已经是完整的 URL
+        if pictureString.lowercased().hasPrefix("http://") || pictureString.lowercased().hasPrefix("https://") {
+            return URL(string: pictureString)
+        }
+        
+        // 否则，拼接 API 基础 URL
+        return URL(string: "\(LearnForumAPIClientAPI.basePath)/\(pictureString)")
+    }
+    
+    private func formattedDate(_ date: Date, withTime: Bool = false) -> String {
+        let formatter = DateFormatter()
+        if withTime {
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+        } else {
+            formatter.dateStyle = .short
+        }
+        return formatter.string(from: date)
+    }
+}
+
 #Preview {
     QuestionBankView()
+}
+
+// 题库详情页的预览
+#Preview("Question Bank Details") {
+    NavigationView {
+        QuestionBankDetailView(bank: QuestionBank(
+            createTime: Date(),
+            description: "This is a test question bank description with more details about the question bank to help users understand its content and purpose.",
+            id: "1001",
+            picture: "https://picsum.photos/800/600", 
+            priority: 1,
+            title: "Example Question Bank",
+            updateTime: Date(),
+            userId: "user123"
+        ))
+    }
 } 

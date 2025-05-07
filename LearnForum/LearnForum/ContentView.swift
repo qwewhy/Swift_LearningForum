@@ -40,7 +40,7 @@ struct ContentView: View {
     private func checkLoginStatus() {
         UserControllerAPI.getLoginUserUsingGET { response, error in
             if let error = error {
-                print("获取用户信息错误: \(error)")
+                print("Error getting user info: \(error)")
                 self.isLoggedIn = false
                 return
             }
@@ -67,9 +67,9 @@ struct MainTabView: View {
                 Image(systemName: "globe")
                     .imageScale(.large)
                     .foregroundStyle(.tint)
-                Text("你好，\(userData?.userName ?? "用户")")
+                Text("Hello, \(userData?.userName ?? "User")")
                 
-                Button("退出登录") {
+                Button("Logout") {
                     logout()
                 }
                 .padding()
@@ -80,12 +80,12 @@ struct MainTabView: View {
             }
             .padding()
             .tabItem { 
-                Label("首页", systemImage: "house") 
+                Label("Home", systemImage: "house") 
             }
             
             QuestionBankView()
                 .tabItem {
-                    Label("题库", systemImage: "folder")
+                    Label("Question Banks", systemImage: "folder")
                 }
         }
     }
@@ -93,7 +93,7 @@ struct MainTabView: View {
     private func logout() {
         UserControllerAPI.userLogoutUsingPOST { response, error in
             if let error = error {
-                print("退出登录失败: \(error)")
+                print("Logout failed: \(error)")
                 return
             }
             

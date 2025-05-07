@@ -15,14 +15,14 @@ public struct QuestionVO: Codable, JSONEncodable, Hashable {
     public var answer: String?
     public var content: String?
     public var createTime: Date?
-    public var id: Int64?
+    public var id: String?
     public var tagList: [String]?
     public var title: String?
     public var updateTime: Date?
     public var user: UserVO?
-    public var userId: Int64?
+    public var userId: String?
 
-    public init(answer: String? = nil, content: String? = nil, createTime: Date? = nil, id: Int64? = nil, tagList: [String]? = nil, title: String? = nil, updateTime: Date? = nil, user: UserVO? = nil, userId: Int64? = nil) {
+    public init(answer: String? = nil, content: String? = nil, createTime: Date? = nil, id: String? = nil, tagList: [String]? = nil, title: String? = nil, updateTime: Date? = nil, user: UserVO? = nil, userId: String? = nil) {
         self.answer = answer
         self.content = content
         self.createTime = createTime

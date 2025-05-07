@@ -21,9 +21,9 @@ public struct PageQuestionBankQuestionVO: Codable, JSONEncodable, Hashable {
     public var records: [QuestionBankQuestionVO]?
     public var searchCount: Bool?
     public var size: String?
-    public var total: Int64?
+    public var total: String?
 
-    public init(countId: String? = nil, current: String? = nil, maxLimit: Int64? = nil, optimizeCountSql: Bool? = nil, orders: [OrderItem]? = nil, pages: String? = nil, records: [QuestionBankQuestionVO]? = nil, searchCount: Bool? = nil, size: String? = nil, total: Int64? = nil) {
+    public init(countId: String? = nil, current: String? = nil, maxLimit: Int64? = nil, optimizeCountSql: Bool? = nil, orders: [OrderItem]? = nil, pages: String? = nil, records: [QuestionBankQuestionVO]? = nil, searchCount: Bool? = nil, size: String? = nil, total: String? = nil) {
         self.countId = countId
         self.current = current
         self.maxLimit = maxLimit

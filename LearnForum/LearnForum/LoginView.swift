@@ -12,7 +12,7 @@ struct LoginView: View {
         NavigationView {
             VStack(spacing: 20) {
                 // 标题
-                Text("学习论坛")
+                Text("Learning Forum")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top, 50)
@@ -20,7 +20,7 @@ struct LoginView: View {
                 // 登录表单
                 VStack(spacing: 20) {
                     // 账号输入框
-                    TextField("账号", text: $userAccount)
+                    TextField("Username", text: $userAccount)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -28,7 +28,7 @@ struct LoginView: View {
                         .keyboardType(.default)
                     
                     // 密码输入框
-                    SecureField("密码", text: $userPassword)
+                    SecureField("Password", text: $userPassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -46,7 +46,7 @@ struct LoginView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         } else {
-                            Text("登录")
+                            Text("Login")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -58,7 +58,7 @@ struct LoginView: View {
                     
                     // 注册按钮
                     Button(action: { showRegister = true }) {
-                        Text("没有账号？点击注册")
+                        Text("No account? Register now")
                             .foregroundColor(.blue)
                     }
                     .padding(.top, 10)
@@ -92,27 +92,24 @@ struct LoginView: View {
             isLoading = false
             
             if let error = error {
-                errorMessage = "登录失败: \(error.localizedDescription)"
-                print("登录错误: \(error)")
+                errorMessage = "Login failed: \(error.localizedDescription)"
                 return
             }
             
             guard let response = response else {
-                errorMessage = "登录失败: 服务器无响应"
+                errorMessage = "Login failed: No server response"
                 return
             }
             
             if let code = response.code, code == 0 {
                 // 登录成功
                 if let userData = response.data {
-                    print("登录成功: \(userData.userName ?? "未知用户")")
                     // 发送登录成功通知
                     NotificationCenter.default.post(name: .userLoggedIn, object: userData)
                 }
             } else {
                 // 登录失败
-                errorMessage = response.message ?? "登录失败，请检查账号和密码"
-                print("登录失败: \(response.message ?? "未知错误")")
+                errorMessage = response.message ?? "Login failed, please check your username and password"
             }
         }
     }
@@ -132,24 +129,24 @@ struct RegisterView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("创建新账号")
+                Text("Create New Account")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top, 30)
                 
                 VStack(spacing: 20) {
-                    TextField("账号", text: $userAccount)
+                    TextField("Username", text: $userAccount)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                         .autocapitalization(.none)
                     
-                    SecureField("密码", text: $userPassword)
+                    SecureField("Password", text: $userPassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                     
-                    SecureField("确认密码", text: $checkPassword)
+                    SecureField("Confirm Password", text: $checkPassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -165,7 +162,7 @@ struct RegisterView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         } else {
-                            Text("注册")
+                            Text("Register")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -182,7 +179,7 @@ struct RegisterView: View {
             .padding()
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("返回") {
+                    Button("Back") {
                         isPresented = false
                     }
                 }
@@ -193,12 +190,12 @@ struct RegisterView: View {
     // 注册方法
     private func register() {
         if userPassword != checkPassword {
-            errorMessage = "两次输入的密码不一致"
+            errorMessage = "Passwords do not match"
             return
         }
         
         if userAccount.isEmpty || userPassword.isEmpty {
-            errorMessage = "账号和密码不能为空"
+            errorMessage = "Username and password cannot be empty"
             return
         }
         
@@ -217,13 +214,12 @@ struct RegisterView: View {
             isLoading = false
             
             if let error = error {
-                errorMessage = "注册失败: \(error.localizedDescription)"
-                print("注册错误: \(error)")
+                errorMessage = "Registration failed: \(error.localizedDescription)"
                 return
             }
             
             guard let response = response else {
-                errorMessage = "注册失败: 服务器无响应"
+                errorMessage = "Registration failed: No server response"
                 return
             }
             
@@ -233,8 +229,7 @@ struct RegisterView: View {
                 onRegisterSuccess()
             } else {
                 // 注册失败
-                errorMessage = response.message ?? "注册失败，请检查输入"
-                print("注册失败: \(response.message ?? "未知错误")")
+                errorMessage = response.message ?? "Registration failed, please check your input"
             }
         }
     }

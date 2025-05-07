@@ -14,15 +14,15 @@ public struct QuestionBankVO: Codable, JSONEncodable, Hashable {
 
     public var createTime: Date?
     public var description: String?
-    public var id: Int64?
+    public var id: String?
     public var picture: String?
     public var questionPage: PageQuestionVO?
     public var title: String?
     public var updateTime: Date?
     public var user: UserVO?
-    public var userId: Int64?
+    public var userId: String?
 
-    public init(createTime: Date? = nil, description: String? = nil, id: Int64? = nil, picture: String? = nil, questionPage: PageQuestionVO? = nil, title: String? = nil, updateTime: Date? = nil, user: UserVO? = nil, userId: Int64? = nil) {
+    public init(createTime: Date? = nil, description: String? = nil, id: String? = nil, picture: String? = nil, questionPage: PageQuestionVO? = nil, title: String? = nil, updateTime: Date? = nil, user: UserVO? = nil, userId: String? = nil) {
         self.createTime = createTime
         self.description = description
         self.id = id
