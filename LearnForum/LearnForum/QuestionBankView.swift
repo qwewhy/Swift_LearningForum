@@ -107,7 +107,9 @@ struct QuestionBankView: View {
                 } else {
                     List {
                         ForEach(questionBanks, id: \.id) { bank in
-                            QuestionBankRow(bank: bank)
+                            NavigationLink(destination: QuestionListView(questionBankId: bank.id?? "")) {
+                                QuestionBankRow(bank: bank)
+                            }
                         }
                     }
                     .refreshable {
