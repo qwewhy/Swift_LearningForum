@@ -108,7 +108,7 @@ struct QuestionBankView: View {
                     List {
                         ForEach(questionBanks, id: \.id) { bank in
                             if let id = bank.id {
-                                NavigationLink(destination: QuestionListView(questionBankId: id)) {
+                                NavigationLink(destination: BankQuestionListView(questionBankId: id)) {
                                     QuestionBankRow(bank: bank)
                                 }
                             }
