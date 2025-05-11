@@ -9,7 +9,7 @@ import SwiftUI
 import LearnForumAPIClient
 
 struct QuestionListView: View {
-    let questionBankId: Int64
+    let questionBankId: String
 
     @State private var questions: [Question] = []
     @State private var isLoading = false
@@ -29,7 +29,7 @@ struct QuestionListView: View {
                         .padding()
                 }
                 else if questions.isEmpty {
-                    Text("当前题库暂无题目")
+                    Text("当前题目暂时无内容")
                         .foregroundColor(.gray)
                         .padding()
                 }
@@ -72,7 +72,7 @@ struct QuestionListView: View {
         errorMessage = nil
 
         var query = QuestionQueryRequest()
-        query.questionBankId = questionBankId
+        query.questionBankId = String(questionBankId)
         query.current = 1      // 正确的分页字段
         query.pageSize = 50
 
@@ -101,6 +101,6 @@ struct QuestionListView: View {
 
 struct QuestionListView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionListView(questionBankId: 1)
+        QuestionListView(questionBankId: "1")
     }
 }

@@ -18,7 +18,7 @@ public struct QuestionQueryRequest: Codable, JSONEncodable, Hashable {
     public var id: Int64?
     public var notId: Int64?
     public var pageSize: Int?
-    public var questionBankId: Int64?
+    public var questionBankId: String?
     public var searchText: String?
     public var sortField: String?
     public var sortOrder: String?
@@ -26,7 +26,7 @@ public struct QuestionQueryRequest: Codable, JSONEncodable, Hashable {
     public var title: String?
     public var userId: Int64?
 
-    public init(answer: String? = nil, content: String? = nil, current: Int? = nil, id: Int64? = nil, notId: Int64? = nil, pageSize: Int? = nil, questionBankId: Int64? = nil, searchText: String? = nil, sortField: String? = nil, sortOrder: String? = nil, tags: [String]? = nil, title: String? = nil, userId: Int64? = nil) {
+    public init(answer: String? = nil, content: String? = nil, current: Int? = nil, id: Int64? = nil, notId: Int64? = nil, pageSize: Int? = nil, questionBankId: String? = nil, searchText: String? = nil, sortField: String? = nil, sortOrder: String? = nil, tags: [String]? = nil, title: String? = nil, userId: Int64? = nil) {
         self.answer = answer
         self.content = content
         self.current = current
