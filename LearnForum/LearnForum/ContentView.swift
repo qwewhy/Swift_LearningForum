@@ -63,29 +63,79 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                Text("你好，\(userData?.userName ?? "用户")")
-                
-                Button("退出登录") {
-                    logout()
+            //user profile
+            NavigationView {
+                VStack(spacing: 20) {
+                    //头像用户名
+                    NavigationLink(destination: UserProfileView()) {
+                        VStack {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 120, height: 120)
+                                .foregroundColor(.blue)
+                            Text(userData?.userName ?? "Johnny")
+                                .font(.title2)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    //用户信息
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("User name: \(userData?.userName ?? "Johnny")")
+                        Text("Email: Johnny123@gmail.com")
+                        Text("Register time: 2025-05-10")
+                    }
+                    .font(.body)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    
+                    Spacer()
+                    
+                    //提问
+                    NavigationLink(destination: AskQuestionView()) {
+                        Text("Ask question")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                    }
+                    
+                    //设置
+                    NavigationLink(destination: SettingsView()) {
+                        Text("Settings")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                    }
+                    
+                    //退出登录
+                    Button(action: logout) {
+                        Text("Exit")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.red)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                    }
+                    Spacer()
                 }
                 .padding()
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-                .padding(.top, 20)
+                .navigationTitle("User Center")
             }
-            .padding()
-            .tabItem { 
-                Label("首页", systemImage: "house") 
+            .tabItem {
+                Label("Home", systemImage: "house")
             }
+            
             
             QuestionBankView()
                 .tabItem {
-                    Label("题库", systemImage: "folder")
+                    Label("Question Bank", systemImage: "folder")
                 }
         }
     }

@@ -12,7 +12,7 @@ struct LoginView: View {
         NavigationView {
             VStack(spacing: 20) {
                 // 标题
-                Text("学习论坛")
+                Text("Learning Forum")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top, 50)
@@ -20,7 +20,7 @@ struct LoginView: View {
                 // 登录表单
                 VStack(spacing: 20) {
                     // 账号输入框
-                    TextField("账号", text: $userAccount)
+                    TextField("Account name", text: $userAccount)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -28,7 +28,7 @@ struct LoginView: View {
                         .keyboardType(.default)
                     
                     // 密码输入框
-                    SecureField("密码", text: $userPassword)
+                    SecureField("Password", text: $userPassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -46,7 +46,7 @@ struct LoginView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         } else {
-                            Text("登录")
+                            Text("Login")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -58,7 +58,7 @@ struct LoginView: View {
                     
                     // 注册按钮
                     Button(action: { showRegister = true }) {
-                        Text("没有账号？点击注册")
+                        Text("Don't have account？Register here")
                             .foregroundColor(.blue)
                     }
                     .padding(.top, 10)
@@ -132,24 +132,24 @@ struct RegisterView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("创建新账号")
+                Text("Creat New Account")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top, 30)
                 
                 VStack(spacing: 20) {
-                    TextField("账号", text: $userAccount)
+                    TextField("Account name", text: $userAccount)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                         .autocapitalization(.none)
                     
-                    SecureField("密码", text: $userPassword)
+                    SecureField("Password", text: $userPassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                     
-                    SecureField("确认密码", text: $checkPassword)
+                    SecureField("Confirm Password", text: $checkPassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -165,7 +165,7 @@ struct RegisterView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         } else {
-                            Text("注册")
+                            Text("Register")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -182,7 +182,7 @@ struct RegisterView: View {
             .padding()
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("返回") {
+                    Button("Return") {
                         isPresented = false
                     }
                 }
