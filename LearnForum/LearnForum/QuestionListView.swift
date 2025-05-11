@@ -9,85 +9,98 @@ import SwiftUI
 import LearnForumAPIClient
 
 struct QuestionListView: View {
-    let questionBankId: String
-    @State private var questions: [QuestionBankQuestion] = []
+    let questionBankId: Int64
+
+    @State private var questions: [Question] = []
     @State private var isLoading = false
-    @State private var errorMessage: String? = nil
+    @State private var errorMessage: String?
+    @State private var expandedQuestionId: Int64?
 
     var body: some View {
-        VStack {
-            if isLoading {
-                ProgressView("加载中...")
-                    .padding()
-            } else if let error = errorMessage {
-                Text("错误：\(error)")
-                    .foregroundColor(.red)
-                    .padding()
-            } else if questions.isEmpty {
-                Text("当前题库暂无题目")
-                    .foregroundColor(.gray)
-                    .padding()
-            } else {
-                List(questions, id: \.id) { q in
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("题目 ID: \(q.id ?? "none")")
-                            .font(.headline)
-                        Text("题目编号: \(q.questionId ?? "none")")
-                            .font(.subheadline)
+        NavigationView {
+            Group {
+                if isLoading {
+                    ProgressView("加载题目中…")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                else if let error = errorMessage {
+                    Text("加载失败：\(error)")
+                        .foregroundColor(.red)
+                        .padding()
+                }
+                else if questions.isEmpty {
+                    Text("当前题库暂无题目")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+                else {
+                    List(questions, id: \.id) { question in
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(question.content ?? "无内容")
+                                .font(.headline)
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            Text("创建时间：\(formattedDate(question.createTime))")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+
+                            if expandedQuestionId == question.id {
+                                Text("答案：\(question.answer ?? "无答案")")
+                                    .font(.body)
+                                    .foregroundColor(.green)
+                            }
+
+                            Button {
+                                expandedQuestionId = (expandedQuestionId == question.id ? nil : question.id)
+                            } label: {
+                                Text(expandedQuestionId == question.id ? "隐藏答案" : "查看答案")
+                                    .font(.footnote)
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        .padding(.vertical, 6)
                     }
-                    .padding(.vertical, 6)
                 }
             }
+            .navigationTitle("题库详情")
         }
-        .navigationTitle("题库内容")
-        .onAppear {
-            loadQuestions()
-        }
+        .onAppear { fetchQuestions() }
     }
 
-    private func loadQuestions() {
+    private func fetchQuestions() {
         isLoading = true
         errorMessage = nil
-        
-        guard let id = Int64(questionBankId) else {
-            errorMessage = "题库id无效"
-            return
-        }
 
-        let request = QuestionBankQuestionQueryRequest(
-            current: 1,
-            pageSize: 20,
-            questionBankId: id,
-            sortField: "createTime",
-            sortOrder: "descend"
-        )
+        var query = QuestionQueryRequest()
+        query.questionBankId = questionBankId
+        query.current = 1      // 正确的分页字段
+        query.pageSize = 50
 
-        QuestionBankQuestionControllerAPI.listQuestionBankQuestionByPageUsingPOST(questionBankQuestionQueryRequest: request) { response, error in
-            isLoading = false
-
-            if let error = error {
-                errorMessage = "请求失败：\(error.localizedDescription)"
-                print("错误信息:" , error)
-                return
+        QuestionControllerAPI
+            .listQuestionByPageUsingPOST(questionQueryRequest: query) { resp, err in
+                DispatchQueue.main.async {
+                    isLoading = false
+                    if let err = err {
+                        errorMessage = err.localizedDescription
+                    } else {
+                        questions = resp?.data?.records ?? []
+                    }
+                }
             }
-            
-            guard response?.code == 0 else {
-                errorMessage = "接口返回错误：\(response?.message ?? "未知错误")"
-                return
-            }
-            
-            /*
-            if response?.code != 0 {
-                errorMessage = "接口返回错误：\(response?.message ?? "未知错误")"
-                return
-            }
-             */
+    }
 
-            questions = response?.data?.records ?? []
-        }
+    private func formattedDate(_ date: Date?) -> String {
+        guard let date = date else { return "未知时间" }
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .short
+        return f.string(from: date)
     }
 }
 
-#Preview {
-    QuestionListView(questionBankId: "61") // 示例 ID
+
+struct QuestionListView_Previews: PreviewProvider {
+    static var previews: some View {
+        QuestionListView(questionBankId: 1)
+    }
 }
