@@ -30,9 +30,9 @@ struct QuestionListView: View {
             } else {
                 List(questions, id: \.id) { q in
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("题目 ID: \(q.id ?? 0)")
+                        Text("题目 ID: \(q.id ?? "none")")
                             .font(.headline)
-                        Text("题目编号: \(q.questionId ?? 0)")
+                        Text("题目编号: \(q.questionId ?? "none")")
                             .font(.subheadline)
                     }
                     .padding(.vertical, 6)

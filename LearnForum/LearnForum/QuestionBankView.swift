@@ -107,8 +107,10 @@ struct QuestionBankView: View {
                 } else {
                     List {
                         ForEach(questionBanks, id: \.id) { bank in
-                            NavigationLink(destination: QuestionListView(questionBankId: bank.id?? "")) {
-                                QuestionBankRow(bank: bank)
+                            if let id = bank.id {
+                                NavigationLink(destination: QuestionListView(questionBankId: id)) {
+                                    QuestionBankRow(bank: bank)
+                                }
                             }
                         }
                     }

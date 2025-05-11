@@ -13,14 +13,14 @@ import AnyCodable
 public struct QuestionBankQuestion: Codable, JSONEncodable, Hashable {
 
     public var createTime: Date?
-    public var id: Int64?
+    public var id: String?
     public var questionBankId: Int64?
-    public var questionId: Int64?
+    public var questionId: String?
     public var questionOrder: Int?
     public var updateTime: Date?
     public var userId: Int64?
 
-    public init(createTime: Date? = nil, id: Int64? = nil, questionBankId: Int64? = nil, questionId: Int64? = nil, questionOrder: Int? = nil, updateTime: Date? = nil, userId: Int64? = nil) {
+    public init(createTime: Date? = nil, id: String? = nil, questionBankId: Int64? = nil, questionId: String? = nil, questionOrder: Int? = nil, updateTime: Date? = nil, userId: Int64? = nil) {
         self.createTime = createTime
         self.id = id
         self.questionBankId = questionBankId
