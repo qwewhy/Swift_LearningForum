@@ -1,0 +1,16 @@
+# LoginUserVO
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**createTime** | **Date** |  | [optional] 
+**id** | **Int64** |  | [optional] 
+**updateTime** | **Date** |  | [optional] 
+**userAvatar** | **String** |  | [optional] 
+**userName** | **String** |  | [optional] 
+**userProfile** | **String** |  | [optional] 
+**userRole** | **String** |  | [optional] 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
