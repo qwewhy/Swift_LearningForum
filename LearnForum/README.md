@@ -60,6 +60,6 @@ If you encounter API connection issues:
 ## Development Team
 
 - **qwewhy**: Hongyuan Wang
-- **BigWhaleDJY**: Jingyu Deng 24905135
+- **BigWhaleDJY**: Jingyu Deng
 - **ryin**: Yanao Kong
 - **yuxing**: Yuxing Ren 
