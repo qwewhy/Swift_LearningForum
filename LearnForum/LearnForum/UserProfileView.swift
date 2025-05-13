@@ -50,7 +50,7 @@ struct UserProfileView: View {
                         }) {
                             HStack {
                                 Image(systemName: "star.fill")
-                                Text("Favorite qquestions")
+                                Text("Favorite questions")
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
