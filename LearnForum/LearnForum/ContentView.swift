@@ -93,7 +93,7 @@ struct MainTabView: View {
                     
                     //提问
                     NavigationLink(destination: AskQuestionView()) {
-                        Text("Ask question")
+                        Text("Search questions")
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
