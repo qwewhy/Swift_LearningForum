@@ -40,7 +40,7 @@ struct ContentView: View {
     private func checkLoginStatus() {
         UserControllerAPI.getLoginUserUsingGET { response, error in
             if let error = error {
-                print("获取用户信息错误: \(error)")
+                print("Error getting user information: \(error)")
                 self.isLoggedIn = false
                 return
             }
@@ -143,7 +143,7 @@ struct MainTabView: View {
     private func logout() {
         UserControllerAPI.userLogoutUsingPOST { response, error in
             if let error = error {
-                print("退出登录失败: \(error)")
+                print("Failed to exit: \(error)")
                 return
             }
             

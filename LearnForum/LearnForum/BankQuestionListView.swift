@@ -8,9 +8,9 @@
 import SwiftUI
 import LearnForumAPIClient
 
-/// 接收一个题库 ID（String），拉库下面的题目列表
+
 struct BankQuestionListView: View {
-    let questionBankId: String   // 题库ID  String
+    let questionBankId: String
 
     @State private var questions: [Question] = []
     @State private var isLoading = false
@@ -29,7 +29,6 @@ struct BankQuestionListView: View {
             else {
                 ForEach(questions, id: \.id) { (q: Question) in
                     NavigationLink {
-                        // 详情页接收Int64，强制解包q.id或默认
                         QuestionDetailView(questionId: q.id ?? 0)
                     } label: {
                         VStack(alignment: .leading, spacing: 4) {

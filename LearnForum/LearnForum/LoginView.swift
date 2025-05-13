@@ -92,27 +92,27 @@ struct LoginView: View {
             isLoading = false
             
             if let error = error {
-                errorMessage = "登录失败: \(error.localizedDescription)"
-                print("登录错误: \(error)")
+                errorMessage = "Login Failed: \(error.localizedDescription)"
+                print("Login error: \(error)")
                 return
             }
             
             guard let response = response else {
-                errorMessage = "登录失败: 服务器无响应"
+                errorMessage = "Login Failed: no response from server"
                 return
             }
             
             if let code = response.code, code == 0 {
                 // 登录成功
                 if let userData = response.data {
-                    print("登录成功: \(userData.userName ?? "未知用户")")
+                    print("Login Success: \(userData.userName ?? "Unknown user")")
                     // 发送登录成功通知
                     NotificationCenter.default.post(name: .userLoggedIn, object: userData)
                 }
             } else {
                 // 登录失败
-                errorMessage = response.message ?? "登录失败，请检查账号和密码"
-                print("登录失败: \(response.message ?? "未知错误")")
+                errorMessage = response.message ?? "Login Failed，please check your account or password"
+                print("Login Failed: \(response.message ?? "Unknown error")")
             }
         }
     }
@@ -193,12 +193,12 @@ struct RegisterView: View {
     // 注册方法
     private func register() {
         if userPassword != checkPassword {
-            errorMessage = "两次输入的密码不一致"
+            errorMessage = "Two passwords don't match"
             return
         }
         
         if userAccount.isEmpty || userPassword.isEmpty {
-            errorMessage = "账号和密码不能为空"
+            errorMessage = "Account and password can't be empty"
             return
         }
         
@@ -217,13 +217,13 @@ struct RegisterView: View {
             isLoading = false
             
             if let error = error {
-                errorMessage = "注册失败: \(error.localizedDescription)"
-                print("注册错误: \(error)")
+                errorMessage = "Register Failed: \(error.localizedDescription)"
+                print("Register error: \(error)")
                 return
             }
             
             guard let response = response else {
-                errorMessage = "注册失败: 服务器无响应"
+                errorMessage = "Register Failed: no response from server"
                 return
             }
             
@@ -233,8 +233,8 @@ struct RegisterView: View {
                 onRegisterSuccess()
             } else {
                 // 注册失败
-                errorMessage = response.message ?? "注册失败，请检查输入"
-                print("注册失败: \(response.message ?? "未知错误")")
+                errorMessage = response.message ?? "Register Failed，please check your input"
+                print("Register Failed: \(response.message ?? "Unknown error")")
             }
         }
     }
