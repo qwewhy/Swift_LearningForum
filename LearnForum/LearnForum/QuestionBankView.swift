@@ -115,7 +115,7 @@ struct QuestionBankView: View {
                     }
                 }
             }
-            .navigationTitle("题库")
+            .navigationTitle("Question bank")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {

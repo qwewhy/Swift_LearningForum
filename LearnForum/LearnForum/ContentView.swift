@@ -80,12 +80,12 @@ struct MainTabView: View {
             }
             .padding()
             .tabItem { 
-                Label("首页", systemImage: "house") 
+                Label("Home", systemImage: "house")
             }
             
             QuestionBankView()
                 .tabItem {
-                    Label("题库", systemImage: "folder")
+                    Label("Question bank", systemImage: "folder")
                 }
         }
     }
