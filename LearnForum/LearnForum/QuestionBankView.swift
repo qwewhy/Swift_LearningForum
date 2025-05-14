@@ -115,7 +115,7 @@ struct QuestionBankView: View {
                     }
                 }
             }
-            .navigationTitle("Question bank")
+            .navigationTitle("Question Banks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -242,7 +242,7 @@ struct QuestionBankRow: View {
             
             HStack {
                 if let createdTime = bank.createTime {
-                    Text("创建时间: \(formattedDate(createdTime))")
+                    Text("Created: \(formattedDate(createdTime))")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
